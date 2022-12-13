@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-
 import { defineAsyncComponent } from 'vue'
 
-const content = defineAsyncComponent(() => import('./content/index.vue'))
+const contentBox = defineAsyncComponent(() => import('./content/index.vue'))
 </script>
 
 <template>
-  <content />
+  <contentBox />
 </template>
 
-<style scoped>
-</style>
