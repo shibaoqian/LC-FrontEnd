@@ -1,19 +1,19 @@
 import getImageRaw from "@/utils/getImageRaw.js";
 const comRowLoad = [
     {
-        name: 'button',
+        name: '按钮',
         width: 100,
         height: 50,
         icon: getImageRaw('icon','vue','svg')
     },
     {
-        name: 'button',
+        name: '按钮',
         width: 100,
         height: 50,
         icon: getImageRaw('icon','vue','svg')
     },
     {
-        name: 'button',
+        name: '按钮',
         width: 100,
         height: 50,
         icon: getImageRaw('icon','vue','svg')

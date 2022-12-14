@@ -18,11 +18,14 @@ const appsBox = defineAsyncComponent(() => import('@/components/appsBox.vue'))
 
 <style lang="scss" scoped>
 .content-body {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   .components-box{
     width: 200px;
+  }
+  .apps-box{
+    width: calc(100% - 200px);
   }
 }
 </style>
