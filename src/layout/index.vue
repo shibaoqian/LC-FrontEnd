@@ -1,7 +1,7 @@
 <script setup>
 import {defineAsyncComponent} from "vue";
-const componentsBox = defineAsyncComponent(() => import('@/components/components.vue'))
-const appsBox = defineAsyncComponent(() => import('@/components/appsBox.vue'))
+const componentsBox = defineAsyncComponent(() => import('@/layout/components/components.vue'))
+const appsBox = defineAsyncComponent(() => import('@/layout/components/appsBox.vue'))
 </script>
 <template>
   <div class="content-body">
