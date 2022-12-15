@@ -28,7 +28,6 @@ import FEBtn from "@/components/FEBtn.vue";
   const dragStatus = computed(() => store.getters.dragStatus)
   const comRaw = computed(() => store.getters.comRaw)
   const appsData = computed(() => store.getters.appsData)
-
 function dragenter(e) {
   store.commit('setDragStatus',true)
 }

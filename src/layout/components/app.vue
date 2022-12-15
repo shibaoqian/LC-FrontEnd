@@ -1,12 +1,12 @@
 <template>
-  <div class="button-body">
-    button-test
+  <div class="app-body">
+    app-test
   </div>
 </template>
 
 <script>
 export default {
-  name: "btn",
+  name: "app",
   data() {
     return {
       data: ''
@@ -14,14 +14,15 @@ export default {
   },
   methods: {
     load() {
-      console.log('button')
+      console.log('app')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.button-body {
-  background: #747bff;
+.app-body {
+  width: 100%;
+  height: 100%;
 }
 </style>

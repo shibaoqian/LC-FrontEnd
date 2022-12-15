@@ -6,8 +6,10 @@ import {shallowRef} from "vue";
 const comRawLoad = [
     {
         name: '按钮',
-        width: 100,
-        height: 50,
+        style: {
+            width: 100,
+            height: 50
+        },
         component: shallowRef(FEBtn),
         key: 'FEButton',
         icon: getImageRaw('icon','vue','svg'),
@@ -18,8 +20,10 @@ const comRawLoad = [
     },
     {
         name: '输入',
-        width: 100,
-        height: 50,
+        style: {
+            width: 200,
+            height: 100
+        },
         component: shallowRef(FEInput),
         key: 'FEInput',
         icon: getImageRaw('icon','vue','svg'),
@@ -30,8 +34,10 @@ const comRawLoad = [
     },
     {
         name: '单选',
-        width: 100,
-        height: 50,
+        style: {
+            width: 300,
+            height: 100
+        },
         component: shallowRef(FERadio),
         key: 'FERadio',
         icon: getImageRaw('icon','vue','svg'),
