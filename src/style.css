@@ -112,6 +112,10 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.c-move{
+  cursor: move;
+}
+
 .grid{
   display: grid;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="appsBox-body" ref="appsBox" @dragenter="dragenter" @dragleave="dragleave" @dragover="dragover">
+  <div class="appsBox-body" ref="appsBox" @drop="dragDrop"  @dragenter.prevent="dragenter" @dragleave.prevent="dragleave" @dragover.prevent="dragover">
     <div class="lattice-layer">
       <div class="lattice-control" v-if="clientWidth">
         <div class="lattice-row" v-for="(row,indexW) in clientWidth" :key="indexW">
@@ -8,40 +8,43 @@
         </div>
       </div>
     </div>
-    <div class="lattice-mask" :class="reactiveData.dragStatus ? 'mask-show' : 'mask-none'"></div>
+    <div class="lattice-mask"   :class="dragStatus ? 'mask-show' : 'mask-none'"></div>
   </div>
 </template>
 
 <script setup>
 import {computed, reactive, ref} from "vue";
-import {useStore,mapGetters} from "vuex";
+import {useStore} from "vuex";
 
   const appsBox = ref()
   const store = useStore()
-  let reactiveData = reactive({
-    dragStatus: false
-  })
+
   const clientHeight = computed(() => parseInt((appsBox.value?.clientHeight / 45).toFixed(1)) - 1)
   const clientWidth = computed(() => parseInt((appsBox.value?.clientWidth / 45).toFixed(0)) - 1)
-  const stateMap = computed(() => {  return{ ...mapGetters(['dragX','dragY'])}})
+  const dragStatus = computed(() => store.getters.dragStatus)
+
 function dragenter(e) {
-  // console.log(e,'appsBox')
-  reactiveData.dragStatus = true
+  store.commit('setDragStatus',true)
 }
 
 function dragover(e) {
   // console.log(e,'dragover')
-  let data = e.dataTransfer.getData("id");
-  console.log(data)
   store.commit('setXYData',{X: e.layerX,Y: e.layerY,})
   // e.preventDefault();
   // reactiveData.dragStatus = true
 }
 
 function dragleave(e) {
-  reactiveData.dragStatus = false
+  store.commit('setDragStatus',false)
   // console.log(e,'appsBoxDragleave')
 }
+
+function dragDrop(e) {
+  store.commit('setDragStatus',false)
+  let data = e.dataTransfer.getData("text");
+  console.log(data,'drop')
+}
+
 </script>
 
 <style lang="scss" scoped>

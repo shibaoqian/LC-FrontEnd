@@ -1,13 +1,15 @@
 <template>
-  <div draggable="true" class="com-box flex a-c pointer j-c" @drag="dragDom" @dragstart="dragStartDom" @dragend="dragEndDom">
+  <div draggable="true" class="com-box flex a-c j-c"  @drag="dragDom" @dragstart="dragStartDom" @dragend="dragEndDom">
     <img  draggable="false" class="com-img" :src="props.icon" alt="">
     <span>{{props.name}}</span>
   </div>
 </template>
 
 <script setup>
-import {defineAsyncComponent, ref} from "vue";
+import {computed, defineAsyncComponent, ref} from "vue";
+import {useStore} from "vuex";
 
+  const store = useStore()
   const props = defineProps(
       {
         icon: String,
@@ -16,6 +18,7 @@ import {defineAsyncComponent, ref} from "vue";
       }
   )
 
+  const dragStatus = computed(() => store.getters.dragStatus)
   const comData = document.getElementById('comData')
 
   function dragDom(e) {
@@ -29,13 +32,14 @@ import {defineAsyncComponent, ref} from "vue";
 
   }
   function dragStartDom(e) {
+    e.currentTarget.style.border = "#01deff 1px dashed";
     // Set the drag's format and data. Use the event target's id for the data
-    e.dataTransfer.setData('id', e.target.id)
+    e.dataTransfer.setData("text/plain", e.target.id);
     // dt.setDragImage(comData, 0, 0);
-    // console.log(e,'dragStartDom')
+    console.log(e,'dragStartDom')
   }
   function dragEndDom(e) {
-    e.dataTransfer.clearData()
+    e.currentTarget.style.border = "#ccc solid 1px";
     console.log(e,'dragEndDom')
   }
 </script>
@@ -49,6 +53,7 @@ import {defineAsyncComponent, ref} from "vue";
   gap: 7px;
   user-select: none;
   z-index: 1;
+
   .com-img{
     width: 20px;
     height: 20px;
