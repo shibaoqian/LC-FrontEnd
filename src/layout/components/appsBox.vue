@@ -9,25 +9,32 @@
       </div>
     </div>
     <div class="lattice-mask"   :class="dragStatus ? 'mask-show' : 'mask-none'"></div>
+    <div class="lattice-appsBox">
+      <div class="app-box" :style="`top: ${item.position.Y}px;left: ${item.position.X}px`" v-for="(item,index) in appsData" :key="index">
+        <component :is="item.component"></component>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {computed, reactive, ref} from "vue";
+import {computed, ref} from "vue";
 import {useStore} from "vuex";
-
+import FEBtn from "@/components/FEBtn.vue";
   const appsBox = ref()
   const store = useStore()
-
   const clientHeight = computed(() => parseInt((appsBox.value?.clientHeight / 45).toFixed(1)) - 1)
   const clientWidth = computed(() => parseInt((appsBox.value?.clientWidth / 45).toFixed(0)) - 1)
   const dragStatus = computed(() => store.getters.dragStatus)
+  const comRaw = computed(() => store.getters.comRaw)
+  const appsData = computed(() => store.getters.appsData)
 
 function dragenter(e) {
   store.commit('setDragStatus',true)
 }
 
 function dragover(e) {
+  e.preventDefault();
   // console.log(e,'dragover')
   store.commit('setXYData',{X: e.layerX,Y: e.layerY,})
   // e.preventDefault();
@@ -40,9 +47,24 @@ function dragleave(e) {
 }
 
 function dragDrop(e) {
-  store.commit('setDragStatus',false)
+  e.preventDefault();
+
   let data = e.dataTransfer.getData("text");
+  store.commit('setDragStatus',false)
+  let appData = {}
+  comRaw.value.forEach(res => {
+    if (res.key === data){
+      res.position.X = store.getters.dragX
+      res.position.Y = store.getters.dragY
+      appData = res
+    }
+  })
+
+  store.commit('setAppsData',appData)
+  console.log(appsData.value)
+
   console.log(data,'drop')
+  // e.target.appendChild(document.getElementById(data));
 }
 
 </script>
@@ -105,6 +127,15 @@ function dragDrop(e) {
   }
   .mask-show{
     opacity: 1;
+  }
+  .lattice-appsBox{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    .app-box{
+      position: absolute;
+    }
   }
 }
 </style>

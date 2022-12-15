@@ -1,12 +1,12 @@
 <template>
-  <div class="button-body">
-    button-test
+  <div class="FEInput-body">
+    FEInput-test
   </div>
 </template>
 
 <script>
 export default {
-  name: "btn",
+  name: "FEInput",
   data() {
     return {
       data: ''
@@ -14,17 +14,16 @@ export default {
   },
   methods: {
     load() {
-      console.log('button')
+      console.log('FEInput')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.button-body {
-  width: 200px;
-  height: 100px;
-  background: #747bff;
-  z-index: -999;
+.FEInput-body {
+  width: 100%;
+  height: 100%;
+  background: aqua;
 }
 </style>

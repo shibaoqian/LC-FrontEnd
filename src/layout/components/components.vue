@@ -1,6 +1,6 @@
 <template>
   <div class="components-body flex j-c-b">
-    <dragDom  v-for="(item,index) in comData" :key="index" :icon="item.icon" :name="item.name" :component="item.component">
+    <dragDom  v-for="(item,index) in comData" :key="index" :icon="item.icon" :name="item.name" :keyName="item.key">
     </dragDom>
   </div>
 </template>
@@ -11,7 +11,7 @@ import {defineAsyncComponent} from "vue";
 const dragDom = defineAsyncComponent(() => import('@/layout/components/dragDom.vue'))
 import { useStore } from 'vuex'
 const store = useStore()
-const comData = store.getters.comData
+const comData = store.getters.comRaw
 </script>
 
 <style lang="scss" scoped>

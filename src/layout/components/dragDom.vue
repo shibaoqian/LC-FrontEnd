@@ -14,7 +14,7 @@ import {useStore} from "vuex";
       {
         icon: String,
         name: String,
-        component: String
+        keyName: String
       }
   )
 
@@ -34,7 +34,7 @@ import {useStore} from "vuex";
   function dragStartDom(e) {
     e.currentTarget.style.border = "#01deff 1px dashed";
     // Set the drag's format and data. Use the event target's id for the data
-    e.dataTransfer.setData("text/plain", e.target.id);
+    e.dataTransfer.setData("text", props.keyName);
     // dt.setDragImage(comData, 0, 0);
     console.log(e,'dragStartDom')
   }

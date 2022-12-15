@@ -1,12 +1,12 @@
 <template>
-  <div class="button-body">
-    button-test
+  <div class="FERadio-body">
+    FERadio-test
   </div>
 </template>
 
 <script>
 export default {
-  name: "btn",
+  name: "FERadio",
   data() {
     return {
       data: ''
@@ -14,17 +14,16 @@ export default {
   },
   methods: {
     load() {
-      console.log('button')
+      console.log('FERadio')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.button-body {
-  width: 200px;
-  height: 100px;
-  background: #747bff;
-  z-index: -999;
+.FERadio-body {
+  width: 100%;
+  height: 100%;
+  background: darkorange;
 }
 </style>
