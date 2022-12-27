@@ -1,5 +1,12 @@
 <template>
-  <div class="appsBox-body" ref="appsBox" @drop="dragDrop"  @dragenter.prevent="dragenter" @dragleave.prevent="dragleave" @dragover.prevent="dragover">
+  <div class="appsBox-body" ref="appsBox"
+       @mousedown="mouseDown"
+       @mouseup="mouseUp"
+       @mousemove="mouseMove"
+       @drop="dragDrop"
+       @dragenter.prevent="dragenter"
+       @dragleave.prevent="dragleave"
+       @dragover.prevent="dragover">
     <div class="lattice-layer">
       <div class="lattice-control" v-if="clientWidth">
         <div class="lattice-row" v-for="(row,indexW) in clientWidth" :key="indexW">
@@ -9,18 +16,17 @@
       </div>
     </div>
     <div class="lattice-mask"   :class="dragStatus ? 'mask-show' : 'mask-none'"></div>
-    <div class="lattice-appsBox">
-      <div class="app-box" :style="`top: ${item.position.Y}px;left: ${item.position.X}px`" v-for="(item,index) in appsData" :key="index">
-        <component :is="item.component"></component>
-      </div>
-    </div>
+    <apps :appsData="appsData"></apps>
   </div>
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import {computed, ref, shallowRef} from "vue";
 import {useStore} from "vuex";
-import FEBtn from "@/components/FEBtn.vue";
+import snowflake from 'snowflake-id'
+import apps from "@/layout/components/apps.vue";
+import {cloneDeep} from 'lodash'
+
   const appsBox = ref()
   const store = useStore()
   const clientHeight = computed(() => parseInt((appsBox.value?.clientHeight / 45).toFixed(1)) - 1)
@@ -28,6 +34,10 @@ import FEBtn from "@/components/FEBtn.vue";
   const dragStatus = computed(() => store.getters.dragStatus)
   const comRaw = computed(() => store.getters.comRaw)
   const appsData = computed(() => store.getters.appsData)
+  const focusStatus = computed(() => store.getters.focusStatus)
+  const focusAppData = computed(() => store.getters.focusAppData)
+  const downX = computed(() => store.getters.downX)
+  const downY = computed(() => store.getters.downY)
 function dragenter(e) {
   store.commit('setDragStatus',true)
 }
@@ -47,25 +57,53 @@ function dragleave(e) {
 
 function dragDrop(e) {
   e.preventDefault();
-
+  const snowflakeId = new snowflake
   let data = e.dataTransfer.getData("text");
   store.commit('setDragStatus',false)
   let appData = {}
-  comRaw.value.forEach(res => {
-    if (res.key === data){
-      res.position.X = store.getters.dragX
-      res.position.Y = store.getters.dragY
-      appData = res
-    }
-  })
+  // comRaw.value.forEach(res => {
+  //
+  //   if (res.key === data){
+  //     res.key = `${res.key}-${snowflakeId.generate()}`
+  //     res.position.X = store.getters.dragX
+  //     res.position.Y = store.getters.dragY
+  //
+  //   }
+  // })
+  appData = cloneDeep(comRaw.value.find((res) => { return res.key === data }))
 
+  appData.key = `${appData.key}-${snowflakeId.generate()}`
+  appData.component = shallowRef(appData.component)
+  appData.position.X = store.getters.dragX
+  appData.position.Y = store.getters.dragY
   store.commit('setAppsData',appData)
-  console.log(appsData.value)
+  console.log(appsData.value,'appsData')
+  console.log(comRaw.value,'comRaw')
 
-  console.log(data,'drop')
+  // console.log(data,'drop')
   // e.target.appendChild(document.getElementById(data));
 }
-
+function mouseDown(e) {
+  store.commit('clearFocusAppData')
+  console.log('downBox')
+}
+function mouseMove(e) {
+  if (focusStatus.value){
+    // store.commit('setXYData',{X: e.movementX,Y: e.movementY,})
+    appsData.value.forEach(res => {
+      if (res.key === focusAppData.value.key){
+        res.position.X = e.clientX - 200 - downX.value
+        res.position.Y = e.clientY - downY.value
+        // console.log(X,Y)
+        console.log(res.position.X,res.position.Y,'downData')
+      }
+    })
+    console.log(e,'mouseMove')
+  }
+}
+function mouseUp(item) {
+  store.commit('setFocusStatus', false)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -127,14 +165,6 @@ function dragDrop(e) {
   .mask-show{
     opacity: 1;
   }
-  .lattice-appsBox{
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    .app-box{
-      position: absolute;
-    }
-  }
+
 }
 </style>

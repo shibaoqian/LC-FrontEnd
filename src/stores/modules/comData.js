@@ -51,16 +51,27 @@ const comRawLoad = [
 export default {
     state: {
         comRaw: comRawLoad,
-        appsData: []
+        appsData: [],
+        focusAppData: {},
+        focusStatus: false
     },
     mutations: {
-        setComData(state,data) {
-            state.comRaw = data
-        },
+        // setComData(state,data) {
+        //     state.comRaw = data
+        // },
         setAppsData(state,data) {
             state.appsData.push(
                 data
             )
+        },
+        setFocusAppData(state,data) {
+            state.focusAppData = data
+        },
+        clearFocusAppData(state,data) {
+            state.focusAppData = {}
+        },
+        setFocusStatus(state,data) {
+            state.focusStatus = data
         }
     }
 }

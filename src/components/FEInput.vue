@@ -1,6 +1,7 @@
 <template>
   <div class="FEInput-body">
-    FEInput-test
+    FEInput-test{{data}}
+    <button @click="data++">点击</button>
   </div>
 </template>
 
@@ -9,7 +10,7 @@ export default {
   name: "FEInput",
   data() {
     return {
-      data: ''
+      data:0
     }
   },
   methods: {
