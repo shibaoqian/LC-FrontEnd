@@ -53,12 +53,11 @@ export default {
         comRaw: comRawLoad,
         appsData: [],
         focusAppData: {},
-        focusStatus: false
+        focusStatus: false,
+        moveStatus: false,
+        menuShow: false
     },
     mutations: {
-        // setComData(state,data) {
-        //     state.comRaw = data
-        // },
         setAppsData(state,data) {
             state.appsData.push(
                 data
@@ -69,9 +68,33 @@ export default {
         },
         clearFocusAppData(state,data) {
             state.focusAppData = {}
+            state.focusStatus = false
+        },
+        setMoveStatus(state,data) {
+            state.moveStatus = data
+        },
+        setMenuShow(state,data) {
+            state.menuShow = data
         },
         setFocusStatus(state,data) {
-            state.focusStatus = data
+            if (state.focusStatus && data.key !== state.focusAppData.key){
+                state.focusStatus = false
+                setTimeout(() => {
+                    state.focusStatus = true
+                },300)
+            }else{
+                state.focusStatus = true
+            }
+        },
+        delAppData(state){
+            const key = state.focusAppData.key
+            let delIndex = 0
+            state.appsData.forEach((res,index) => {
+                if (res.key === key){
+                    delIndex = index
+                }
+            })
+            state.appsData.splice(delIndex,1)
         }
     }
 }

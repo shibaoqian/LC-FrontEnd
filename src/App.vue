@@ -1,4 +1,11 @@
 <script lang="ts" setup>
+function stop(){
+
+  return false;
+
+}
+
+document.oncontextmenu=stop;
 import { defineAsyncComponent } from 'vue'
 
 const contentBox = defineAsyncComponent(() => import('./layout/index.vue'))

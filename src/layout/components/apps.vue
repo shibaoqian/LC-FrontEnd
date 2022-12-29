@@ -1,6 +1,7 @@
 <template>
     <div class="app-box c-move"
          @mousedown.stop="(e) => mouseDown(item,e)"
+         @mouseup.stop="mouseUp"
          :class="item.key === focusAppData.key ? 'selected' : ''"
          :style="boxStyle(item)"
          v-for="(item,index) in props.appsData"
@@ -28,14 +29,27 @@ function boxStyle(item) {
   }
 }
 const focusAppData = computed( () => store.getters.focusAppData )
+const menuShow = computed( () => store.getters.menuShow )
 
 function mouseDown(item,e) {
+  if (e.button === 0 ){
+    if (!menuShow.value){
+      store.commit('setFocusStatus', item)
+    }
+    store.commit('setMoveStatus', true)
+    store.commit('setMenuShow', false)
+  }else if (e.button === 2){
+    store.commit('setMenuShow', true)
+  }
   store.commit('setFocusAppData', item)
-  store.commit('setFocusStatus', true)
   store.commit('setDownData', {X: e.layerX,Y: e.layerY,})
-  console.log(e)
+  console.log(e.button)
 }
-
+function mouseUp() {
+  // debugger
+  //清空选择状态
+  store.commit('setMoveStatus', false)
+}
 </script>
 
 <style lang="scss" scoped>

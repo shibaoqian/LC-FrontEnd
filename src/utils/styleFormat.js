@@ -1,8 +1,10 @@
-export default function styleFormatFun (type) {
-
-}
-
-const styleFormat = {
-    width: 'px',
-    height: 'px'
-}
+export const styleFormat = [
+    {
+        style: 'width',
+        value: ''
+    },
+    {
+        style: 'height',
+        value: ''
+    }
+]

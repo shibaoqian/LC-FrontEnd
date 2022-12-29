@@ -1,6 +1,6 @@
 <template>
   <div class="button-body">
-    button-test
+    <el-button>test</el-button>
   </div>
 </template>
 
@@ -22,6 +22,6 @@ export default {
 
 <style lang="scss" scoped>
 .button-body {
-  background: #747bff;
+
 }
 </style>

@@ -3,6 +3,7 @@
        @mousedown="mouseDown"
        @mouseup="mouseUp"
        @mousemove="mouseMove"
+       @mouseleave="mouseLeave"
        @drop="dragDrop"
        @dragenter.prevent="dragenter"
        @dragleave.prevent="dragleave"
@@ -17,92 +18,100 @@
     </div>
     <div class="lattice-mask"   :class="dragStatus ? 'mask-show' : 'mask-none'"></div>
     <apps :appsData="appsData"></apps>
+    <appMenu v-show="menuShow" :style="menuStyle"></appMenu>
   </div>
 </template>
 
 <script setup>
-import {computed, ref, shallowRef} from "vue";
+import {computed, ref, shallowRef, watch} from "vue";
 import {useStore} from "vuex";
 import snowflake from 'snowflake-id'
 import apps from "@/layout/components/apps.vue";
+import appMenu from "@/layout/components/appMenu.vue";
 import {cloneDeep} from 'lodash'
 
   const appsBox = ref()
   const store = useStore()
+
   const clientHeight = computed(() => parseInt((appsBox.value?.clientHeight / 45).toFixed(1)) - 1)
   const clientWidth = computed(() => parseInt((appsBox.value?.clientWidth / 45).toFixed(0)) - 1)
   const dragStatus = computed(() => store.getters.dragStatus)
   const comRaw = computed(() => store.getters.comRaw)
   const appsData = computed(() => store.getters.appsData)
-  const focusStatus = computed(() => store.getters.focusStatus)
+  const moveStatus = computed(() => store.getters.moveStatus)
   const focusAppData = computed(() => store.getters.focusAppData)
   const downX = computed(() => store.getters.downX)
   const downY = computed(() => store.getters.downY)
+  const menuShow = computed(() => store.getters.menuShow)
+  const menuStyle = computed(() => {
+    let left = '0'
+    let top = '0'
+    appsData.value.forEach(res => {
+      if (res.key === focusAppData.value.key){
+        left = `${res.position.X + downX.value}` + 'px'
+        top = `${res.position.Y + downY.value}` + 'px'
+      }
+    })
+    return {
+      left,
+      top
+    }
+  })
+
 function dragenter(e) {
   store.commit('setDragStatus',true)
 }
 
 function dragover(e) {
   e.preventDefault();
-  // console.log(e,'dragover')
+  // 拖拽结束前，保存结束前位置
   store.commit('setXYData',{X: e.layerX,Y: e.layerY,})
-  // e.preventDefault();
-  // reactiveData.dragStatus = true
 }
 
 function dragleave(e) {
+  //拖拽中离开apps区
   store.commit('setDragStatus',false)
-  // console.log(e,'appsBoxDragleave')
 }
 
 function dragDrop(e) {
   e.preventDefault();
+  //拖拽放置事件，赋值
   const snowflakeId = new snowflake
   let data = e.dataTransfer.getData("text");
   store.commit('setDragStatus',false)
   let appData = {}
-  // comRaw.value.forEach(res => {
-  //
-  //   if (res.key === data){
-  //     res.key = `${res.key}-${snowflakeId.generate()}`
-  //     res.position.X = store.getters.dragX
-  //     res.position.Y = store.getters.dragY
-  //
-  //   }
-  // })
   appData = cloneDeep(comRaw.value.find((res) => { return res.key === data }))
-
   appData.key = `${appData.key}-${snowflakeId.generate()}`
   appData.component = shallowRef(appData.component)
   appData.position.X = store.getters.dragX
   appData.position.Y = store.getters.dragY
   store.commit('setAppsData',appData)
-  console.log(appsData.value,'appsData')
-  console.log(comRaw.value,'comRaw')
-
-  // console.log(data,'drop')
-  // e.target.appendChild(document.getElementById(data));
 }
 function mouseDown(e) {
+  //清空选择组件数据
   store.commit('clearFocusAppData')
-  console.log('downBox')
+  store.commit('setMenuShow', false)
 }
 function mouseMove(e) {
-  if (focusStatus.value){
-    // store.commit('setXYData',{X: e.movementX,Y: e.movementY,})
+  //拖动组件
+  if (moveStatus.value){
     appsData.value.forEach(res => {
       if (res.key === focusAppData.value.key){
         res.position.X = e.clientX - 200 - downX.value
         res.position.Y = e.clientY - downY.value
-        // console.log(X,Y)
-        console.log(res.position.X,res.position.Y,'downData')
       }
     })
-    console.log(e,'mouseMove')
   }
 }
+
 function mouseUp(item) {
-  store.commit('setFocusStatus', false)
+  // debugger
+  //清空选择状态
+  store.commit('setMoveStatus', false)
+}
+
+function mouseLeave() {
+  store.commit('setMoveStatus', false)
 }
 </script>
 
@@ -112,6 +121,7 @@ function mouseUp(item) {
   height: 100%;
   overflow: hidden;
   position: relative;
+  z-index: 5;
   .lattice-layer{
     z-index: 0;
     position: absolute;

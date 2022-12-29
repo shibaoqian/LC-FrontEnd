@@ -1,29 +1,19 @@
 <template>
   <div class="FERadio-body">
-    FERadio-test
+    <el-radio-group v-model="data" class="ml-4">
+      <el-radio label="1" size="large">Option 1</el-radio>
+      <el-radio label="2" size="large">Option 2</el-radio>
+    </el-radio-group>
   </div>
 </template>
 
-<script>
-export default {
-  name: "FERadio",
-  data() {
-    return {
-      data: ''
-    }
-  },
-  methods: {
-    load() {
-      console.log('FERadio')
-    }
-  }
-}
+<script setup>
+import {ref} from "vue";
+
+const data = ref('1')
 </script>
 
 <style lang="scss" scoped>
 .FERadio-body {
-  width: 100%;
-  height: 100%;
-  background: darkorange;
 }
 </style>

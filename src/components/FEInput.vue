@@ -1,7 +1,6 @@
 <template>
   <div class="FEInput-body">
-    FEInput-test{{data}}
-    <button @click="data++">点击</button>
+    <el-input v-model="data"></el-input>
   </div>
 </template>
 
@@ -23,8 +22,5 @@ export default {
 
 <style lang="scss" scoped>
 .FEInput-body {
-  width: 100%;
-  height: 100%;
-  background: darkblue;
 }
 </style>
