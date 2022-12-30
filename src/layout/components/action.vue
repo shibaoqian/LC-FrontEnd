@@ -1,22 +1,23 @@
 <template>
   <div class="drawer" :class="{open: drawer}" >
     <h3>参数设置</h3>
-  <div v-for="(item,index) in styleFormat" :key="index" class="action-row">
-    <div class="row-label">
-      {{item.style}}
+    <div v-for="(item,index) in focusAppData.style" :key="index" class="action-row">
+      <div class="row-label">
+        {{item.style}}
+      </div>
+      <el-input v-model="item.value"></el-input>
     </div>
-    <el-input></el-input>
-  </div>
   </div>
 </template>
 
 <script setup>
 import {computed, watch} from "vue";
 import {useStore} from "vuex";
-import {styleFormat} from "@/utils/styleFormat.js";
+
 
 const store = useStore()
 const drawer = computed(() => store.getters.focusStatus)
+const focusAppData = computed(() => store.getters.focusAppData)
 
 
 </script>
