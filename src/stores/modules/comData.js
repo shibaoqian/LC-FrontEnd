@@ -1,5 +1,5 @@
 import {comRawLoad} from "@/utils/comRaw.js";
-
+import { ElMessage } from 'element-plus'
 export default {
     state: {
         comRaw: comRawLoad,
@@ -47,6 +47,11 @@ export default {
                 }
             })
             state.appsData.splice(delIndex,1)
+            this.commit('clearFocusAppData')
+            ElMessage({
+                message: '删除成功！',
+                type: 'success',
+            })
         }
     }
 }

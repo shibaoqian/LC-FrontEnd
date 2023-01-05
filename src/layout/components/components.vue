@@ -2,15 +2,18 @@
   <div class="components-body flex j-c-b">
     <dragDom  v-for="(item,index) in comData" :key="index" :icon="item.icon" :name="item.name" :keyName="item.key">
     </dragDom>
+
   </div>
 </template>
 
 <script setup>
 import {defineAsyncComponent} from "vue";
-
-const dragDom = defineAsyncComponent(() => import('@/layout/components/dragDom.vue'))
 import { useStore } from 'vuex'
+
+
 const store = useStore()
+const DragDom = defineAsyncComponent(() => import('@/layout/components/dragDom.vue'))
+
 const comData = store.getters.comRaw
 </script>
 

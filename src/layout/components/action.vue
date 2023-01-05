@@ -2,16 +2,17 @@
   <div class="drawer" :class="{open: drawer}" >
     <h3>参数设置</h3>
     <div v-for="(item,index) in focusAppData.style" :key="index" class="action-row">
-      <div class="row-label">
-        {{item.style}}
+      <div class="row-label flex a-c">
+        {{item.name}}：
       </div>
-      <el-input v-model="item.value"></el-input>
+      <el-color-picker v-if="item.style === 'background-color'" v-model="item.value" show-alpha />
+      <el-input v-else v-model="item.value"></el-input>
     </div>
   </div>
 </template>
 
 <script setup>
-import {computed, watch} from "vue";
+import {computed} from "vue";
 import {useStore} from "vuex";
 
 
@@ -37,8 +38,12 @@ const focusAppData = computed(() => store.getters.focusAppData)
 
   .action-row{
     display: flex;
+    padding: 10px 10px;
+
     .row-label{
       width: 100px;
+      text-align: right;
+      padding-right: 10px;
     }
   }
 }

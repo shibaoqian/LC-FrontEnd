@@ -26,9 +26,9 @@
 import {computed, ref, shallowRef, watch} from "vue";
 import {useStore} from "vuex";
 import snowflake from 'snowflake-id'
-import apps from "@/layout/components/apps.vue";
-import appMenu from "@/layout/components/appMenu.vue";
 import {cloneDeep} from 'lodash'
+import Apps from "@/layout/components/apps.vue";
+import AppMenu from "@/layout/components/appMenu.vue";
 
   const appsBox = ref()
   const store = useStore()

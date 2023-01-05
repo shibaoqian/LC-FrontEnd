@@ -23,9 +23,14 @@ const props = defineProps({
 
 
 function boxStyle(item) {
+  const style = {}
+  item.style.forEach(res => {
+    style[res.style] = res.value
+  })
   return {
     top: item.position.Y+'px',
-    left: item.position.X+'px'
+    left: item.position.X+'px',
+    ...style
   }
 }
 const focusAppData = computed( () => store.getters.focusAppData )

@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import {computed, defineAsyncComponent, ref} from "vue";
+import {computed} from "vue";
 import {useStore} from "vuex";
 
   const store = useStore()
@@ -17,9 +17,6 @@ import {useStore} from "vuex";
         keyName: String
       }
   )
-
-  const dragStatus = computed(() => store.getters.dragStatus)
-  const comData = document.getElementById('comData')
 
   function dragDom(e) {
 
