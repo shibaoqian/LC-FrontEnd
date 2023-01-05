@@ -2,13 +2,14 @@
   <div class="components-body flex j-c-b">
     <dragDom  v-for="(item,index) in comData" :key="index" :icon="item.icon" :name="item.name" :keyName="item.key">
     </dragDom>
-
+    <GlobalMenu></GlobalMenu>
   </div>
 </template>
 
 <script setup>
 import {defineAsyncComponent} from "vue";
 import { useStore } from 'vuex'
+import GlobalMenu from "@/layout/components/globalMenu.vue";
 
 
 const store = useStore()
@@ -26,6 +27,7 @@ const comData = store.getters.comRaw
   align-content: flex-start;
   padding: 20px 10px;
   gap: 10px;
+  position: relative;
 
 }
 </style>
