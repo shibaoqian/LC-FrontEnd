@@ -1,3 +1,5 @@
+import {cloneDeep} from "lodash";
+
 export const styleFormat = [
     {
         style: 'width',
@@ -15,3 +17,17 @@ export const styleFormat = [
         value: ''
     }
 ]
+
+export function styleRewrite(styles) {
+    const ary = cloneDeep(styleFormat)
+    ary.forEach((res,index) => {
+        Object.keys(styles).forEach(resStyle => {
+            // debugger
+            if (res.style === resStyle){
+                ary[index].value = styles[resStyle]
+            }
+        })
+
+    })
+    return ary
+}

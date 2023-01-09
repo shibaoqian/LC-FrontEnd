@@ -4,16 +4,16 @@ import FEInput from "@/components/FEInput.vue";
 import FERadio from "@/components/FERadio.vue";
 import FEDiv from "@/components/FEDiv.vue";
 import {shallowRef} from "vue";
-import {styleFormat} from "@/utils/styleFormat.js";
+import {styleFormat, styleRewrite} from "@/utils/styleFormat.js";
 export const comRawLoad = [
     {
         name: 'div',
-        style: () => {
-            const ary = styleFormat
-            ary[0].value = '100px'
-            ary[1].value = '100px'
-            return ary
-        },
+        style: () => styleRewrite(
+            {
+                width: '100px',
+                height: '100px'
+            }
+        ),
         component: shallowRef(FEDiv),
         key: 'FEDiv',
         icon: getImageRaw('icon','vue','svg'),
