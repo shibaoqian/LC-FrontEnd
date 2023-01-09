@@ -1,5 +1,5 @@
 <template>
-  <div class="appsBox-body" ref="appsBox"
+  <div class="appsBox-body" id="appsBox" ref="appsBox"
        @mousedown="mouseDown"
        @mouseup="mouseUp"
        @mousemove="mouseMove"
@@ -9,9 +9,9 @@
        @dragleave.prevent="dragleave"
        @dragover.prevent="dragover">
     <div class="lattice-layer">
-      <div class="lattice-control" v-if="clientWidth">
-        <div class="lattice-row" v-for="(row,indexW) in clientWidth" :key="indexW">
-          <div class="lattice-col" :class="indexW === 0 ? 'col-left' : ''" v-for="(col,indexH) in clientHeight" :key="indexH">
+      <div class="lattice-control" v-if="client.width">
+        <div class="lattice-row" v-for="(row,indexW) in client.width" :key="indexW">
+          <div class="lattice-col" :class="indexW === 0 ? 'col-left' : ''" v-for="(col,indexH) in client.height" :key="indexH">
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import {computed, ref, shallowRef, watch} from "vue";
+import {computed, nextTick, reactive, ref, shallowRef} from "vue";
 import {useStore} from "vuex";
 import snowflake from 'snowflake-id'
 import {cloneDeep} from 'lodash'
@@ -32,9 +32,10 @@ import AppMenu from "@/layout/components/appMenu.vue";
 
   const appsBox = ref()
   const store = useStore()
-
-  const clientHeight = computed(() => parseInt((appsBox.value?.clientHeight / 45).toFixed(1)) - 1)
-  const clientWidth = computed(() => parseInt((appsBox.value?.clientWidth / 45).toFixed(0)) - 1)
+  let client = reactive({
+    width: 0,
+    height: 0
+  })
   const dragStatus = computed(() => store.getters.dragStatus)
   const comRaw = computed(() => store.getters.comRaw)
   const appsData = computed(() => store.getters.appsData)
@@ -57,6 +58,18 @@ import AppMenu from "@/layout/components/appMenu.vue";
       top
     }
   })
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    client.height = parseInt((entry.target.clientHeight / 45).toFixed(1)) - 1
+    client.width = parseInt((entry.target.clientWidth / 45).toFixed(0)) - 1
+  }
+});
+nextTick(() => {
+  const box = document.querySelector('#appsBox')
+  if (box){
+    resizeObserver.observe(box);
+  }
+})
 
 function dragenter(e) {
   store.commit('setDragStatus',true)

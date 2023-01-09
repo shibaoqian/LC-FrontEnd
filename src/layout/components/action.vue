@@ -1,7 +1,7 @@
 <template>
   <div class="drawer" :class="{open: drawer}" >
     <h3>参数设置</h3>
-    <div v-for="(item,index) in focusAppData.style" :key="index" class="action-row">
+    <div v-for="(item,index) in focusAppData" :key="index" class="action-row">
       <div class="row-label flex a-c">
         {{item.name}}：
       </div>
@@ -12,14 +12,15 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
+import {computed, watch} from "vue";
 import {useStore} from "vuex";
 
 
 const store = useStore()
 const drawer = computed(() => store.getters.focusStatus)
-const focusAppData = computed(() => store.getters.focusAppData)
-
+const focusAppData = computed(() => {
+  return typeof store.getters.focusAppData.style === 'function' ? store.getters.focusAppData.style() : store.getters.focusAppData.style
+})
 
 </script>
 

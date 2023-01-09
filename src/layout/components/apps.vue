@@ -24,9 +24,17 @@ const props = defineProps({
 
 function boxStyle(item) {
   const style = {}
-  item.style.forEach(res => {
-    style[res.style] = res.value
-  })
+
+  if (typeof item.style === "function"){
+    item.style().forEach(res => {
+      style[res.style] = res.value
+    })
+  }else{
+    item.style.forEach(res => {
+      style[res.style] = res.value
+    })
+  }
+
   return {
     top: item.position.Y+'px',
     left: item.position.X+'px',
